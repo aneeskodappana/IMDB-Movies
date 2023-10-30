@@ -5,6 +5,8 @@ import { useState } from 'react';
 import { useEffect } from 'react';
 import './App.css';
 
+const API_URL = 'http://localhost:3001/movies';
+
 function App() {
   const [isLoading, setLoading] = useState(false);
   const [movies, setMovies] = useState([]);
@@ -12,7 +14,7 @@ function App() {
 
   const getMovies = async (q = '') => {
     setLoading(true)
-    const response = await axios.get(`http://localhost:3001/movies?q=${q}`);
+    const response = await axios.get(`${API_URL}?q=${q}`);
     setMovies(response.data);
     setLoading(false)
   }
