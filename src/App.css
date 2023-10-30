@@ -21,6 +21,10 @@
   padding: 6px 10px;
 }
 
+.search-wrapper img {
+  cursor: pointer;
+}
+
 
 .search-wrapper input {
   background-color: transparent;
@@ -75,4 +79,7 @@
   font-size: 18px;
   margin-top: 10px;
   font-weight: 500;
+}
+.text-center {
+  text-align: center;
 }

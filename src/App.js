@@ -6,30 +6,27 @@ import { useEffect } from 'react';
 import './App.css';
 
 function App() {
+  const [isLoading, setLoading] = useState(false);
   const [movies, setMovies] = useState([]);
   const [search, setSearch] = useState('');
 
-  const getMovies = async () => {
-    const response = await axios.get('http://localhost:3001/movies');
+  const getMovies = async (q = '') => {
+    setLoading(true)
+    const response = await axios.get(`http://localhost:3001/movies?q=${q}`);
     setMovies(response.data);
+    setLoading(false)
   }
 
-
-  const searchMovies = async () => {
-    const response = await axios.get(`http://localhost:3001/movies?q=${search}`);
-    setMovies(response.data);
-  }
 
   const handleKeyDown = (e) => {
     if (e.key === 'Enter') {
-      searchMovies();
+      getMovies(search);
     }
   }
 
   useEffect(() => {
     getMovies();
-  }
-    , [])
+  }, [])
 
   return (
     <>
@@ -37,7 +34,7 @@ function App() {
         <div className="container">
           <img src={logo} alt="" height={30} />
           <div className='search-wrapper'>
-            <img src={searchIcon} alt="" height={18} />
+            <img src={searchIcon} onClick={() => getMovies(search)} alt="" height={18} />
             <input value={search} onChange={e => setSearch(e.target.value)} onKeyDown={handleKeyDown} type="text" placeholder='Find Movies, Series' />
           </div>
 
@@ -47,18 +44,23 @@ function App() {
           </div>
         </div>
       </div>
-      <div className='gallery-container'>
-        {
-          movies?.map(x => (
-            <div className='gallery-item'>
-              <img src={x.Images[0]} alt="" />
-              <h1>{x.Title}</h1>
-              <p>Year: {x.Year} | Genre: {x.Genre}</p>
-              <p>IMDB Rating {x.imdbRating}</p>
-            </div>
-          ))
-        }
-      </div>
+      {
+        isLoading ? <div className='text-center'>Loading...</div> : (
+          <div className='gallery-container'>
+            {
+              movies?.map(x => (
+                <div className='gallery-item'>
+                  <img src={x.Images[0]} alt="" />
+                  <h1>{x.Title}</h1>
+                  <p>Year: {x.Year} | Genre: {x.Genre}</p>
+                  <p>IMDB Rating {x.imdbRating}</p>
+                </div>
+              ))
+            }
+          </div>
+        )
+      }
+
 
 
     </>
