@@ -7,10 +7,23 @@ import './App.css';
 
 function App() {
   const [movies, setMovies] = useState([]);
+  const [search, setSearch] = useState('');
 
   const getMovies = async () => {
     const response = await axios.get('http://localhost:3001/movies');
     setMovies(response.data);
+  }
+
+
+  const searchMovies = async () => {
+    const response = await axios.get(`http://localhost:3001/movies?q=${search}`);
+    setMovies(response.data);
+  }
+
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter') {
+      searchMovies();
+    }
   }
 
   useEffect(() => {
@@ -25,7 +38,7 @@ function App() {
           <img src={logo} alt="" height={30} />
           <div className='search-wrapper'>
             <img src={searchIcon} alt="" height={18} />
-            <input type="text" placeholder='Find Movies, Series' />
+            <input value={search} onChange={e => setSearch(e.target.value)} onKeyDown={handleKeyDown} type="text" placeholder='Find Movies, Series' />
           </div>
 
           <div>
